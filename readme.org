@@ -1,3 +1,13 @@
+Note: The branch of this repository is gh-pages
+
+https://github.com/sanskrit-lexicon/rvlinks/
+To push changes, we must mention the gh-pages branch, 
+rather than usual master branch:
+
+git push origin gh-pages
+When retrieving locally:
+git pull origin gh-pages
+
 
 The RV_sa-hn-ru-de-en.html file is from Marcis Gasuns. June, 2018
 * RV_sa-hn-ru-de-en_1.html (remove one bad character)
