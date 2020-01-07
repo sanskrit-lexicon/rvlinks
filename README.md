@@ -11,7 +11,7 @@ https://sanskrit-lexicon.github.io/rvlinks/rvhymns/rv02.003.html#rv02.003.05
 Each verse is printed in 
 * Devanagari (with accents)
 * IAST (without accents)
-* Russian translation
+* Russian translation (Tatyana Yakovlevna Elizarenkova)
   * Ригведа. [В 3 т.] / Пер. Т. Я. Елизаренковой. (Серия «Литературные памятники»). М.: Наука, 1989—1999.
   * Мандалы I—IV. 1989. 768 стр. 2-е изд., испр. 1999. 2500 экз. ISBN 5-02-011762-5
   * Мандалы V—VIII. 1995. 752 стр. 2-е изд., испр. 1999. 2500 экз. ISBN 5-02-011763-3
