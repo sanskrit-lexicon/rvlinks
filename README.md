@@ -12,6 +12,11 @@ Each verse is printed in
 * Devanagari (with accents)
 * IAST (without accents)
 * Russian translation
+  * Ригведа. [В 3 т.] / Пер. Т. Я. Елизаренковой. (Серия «Литературные памятники»). М.: Наука, 1989—1999.
+  * Мандалы I—IV. 1989. 768 стр. 2-е изд., испр. 1999. 2500 экз. ISBN 5-02-011762-5
+  * Мандалы V—VIII. 1995. 752 стр. 2-е изд., испр. 1999. 2500 экз. ISBN 5-02-011763-3
+  * Мандалы IX—X. 1999. 560 стр. 2500 экз. ISBN 5-02-011587-8
+
 * German translation
 * English translation
 
