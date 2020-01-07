@@ -18,6 +18,8 @@ Each verse is printed in
   * Мандалы IX—X. 1999. 560 стр. 2500 экз. ISBN 5-02-011587-8
 
 * German translation
+  * Geldner, Karl Friedrich. 1951. Der Rig-Veda (aus d. Sanskrit ins Dt. übers. u. mit e. laufenden Kommentar versehen). Cambridge, Mass.: Harvard University Press.
 * English translation
-
-The translations were compiled by Dr. Mārcis Gasūns. 
+  * Griffith, Ralph Thomas Hotchkin. 1890. The Hymns of the Rigveda. E.J. Lazarus.
+  
+The translations were compiled by Dr. Mārcis Gasūns (http://samskrtam.ru). 
