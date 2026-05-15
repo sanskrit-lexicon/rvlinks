@@ -4,35 +4,43 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-**rvlinks** provides web pages that display individual verses of the Ṛgveda, enabling direct links from CDSL dictionaries to the cited Ṛgveda passages. It is deployed at `https://sanskrit-lexicon.github.io/rvlinks/`.
+**rvlinks** is a Sanskrit Lexicon **linking-tool** repository — part of the Cologne Digital Sanskrit Lexicon (CDSL) infrastructure.
 
-Each verse page (e.g., `rvhymns/rv02.003.html#rv02.003.05`) shows the verse in Devanagari with accents, IAST transliteration, Russian translation (Elizarenkova), German translation, and English translation.
+## Repo Category
 
-## Architecture
+`linking-tool` — see the [tooling runbook](https://github.com/sanskrit-lexicon/csl-observatory/blob/main/runbook/cologne-tooling-runbook.md) for category-specific conventions.
 
-| File/Directory | Purpose |
-|---|---|
-| `rvhymns/` | Generated HTML files, one per hymn (`rv01.001.html` through `rv10.191.html`) |
-| `make_hymns_01.py` | Generates `rvhymns/*.html` from the processed RV source |
-| `redo.sh` | Full pipeline: processes source → generates hymn pages |
-| `RV_sa-hn-ru-de-en_1.html` | Primary source: Ṛgveda with Sanskrit, Hindi, Russian, German, English columns |
-| `fonts/` | Sanskrit display fonts (Siddhanta) |
-| `badchars.txt` | Log of character encoding issues found during processing |
-| `clean.sh` | Removes large intermediate files after build |
-| `readme.org` | Detailed pipeline notes |
+## GitHub Issue Conventions
 
-### Build pipeline
+This repository uses the **Cologne tooling-repo taxonomy**. All issues must have:
+- **Exactly one type label** (9 options)
+- **Exactly one severity label** (4 levels)
+- **One milestone** (5 options)
 
-```bash
-sh redo.sh
-# Runs rvtest.py steps 5-7 to transform RV_sa-hn-ru-de-en_1.html
-# Then: python make_hymns_01.py <processed_source> rvhymns
-# Then: sh clean.sh (removes intermediate files)
-```
+### Type Labels
+- `bug` — Code defect (wrong output, broken contract)
+- `feature` — Net-new capability
+- `enhancement` — Improvement to existing capability
+- `performance` — Speed, memory, throughput optimization
+- `tech-debt` — Refactoring, cleanup, dependency updates
+- `security` — CVE, auth issue, credential exposure
+- `documentation` — Prose docs, API docs, comments
+- `infrastructure` — CI/CD, deploy, data pipelines, build tooling
+- `question` — Research, proposals, open discussions
 
-After building, `rvhymns/` is pushed and served via GitHub Pages.
+### Severity Labels
+- `trivial` — Cosmetic, < 1 hour
+- `minor` — Single function/component
+- `major` — Multiple files, design decision
+- `critical` — Blocks users, data loss/security CVE
 
-## Dependencies
+### Milestones
+- **API Stability** — performance, security, regressions
+- **User Experience** — bugs, features, enhancements
+- **Data Quality** — data-pipeline issues, integrity
+- **Developer Experience** — tech-debt, infrastructure, docs
+- **Community** — questions, proposals, discussions
 
-- **Python 3**
-- `RV_sa-hn-ru-de-en_1.html` — source Ṛgveda file (in repo)
+## Cross-Repo Coordination
+
+The org-level project [Tooling Roadmap](https://github.com/orgs/sanskrit-lexicon/projects/9) tracks tool work across all repositories.
