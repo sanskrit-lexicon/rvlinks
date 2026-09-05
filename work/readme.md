@@ -1,3 +1,5 @@
+_Created: 20-10-2020 · Last updated: 05-09-2026_
+
 # miscellaneous work 
 
 ## missing translations.
@@ -18,5 +20,4 @@ Total number of verses: 10552
        Some verses have more than 1 missing translation.
 ```
 
-
-
+_Dr. Mārcis Gasūns_
