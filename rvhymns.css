@@ -29,9 +29,13 @@ padding-bottom: 2px;
 p.comm {
 font-style: italic;
 }
-@font-face { 
+@font-face {
  src: url(fonts/siddhanta.ttf);
  font-family: siddhanta_deva;
+}
+@font-face {
+ src: url(../fonts/sanskrit2003.ttf);
+ font-family: "Sanskrit 2003";
 }
 /* Vedic devanagari */
 p.sa {

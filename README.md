@@ -18,9 +18,12 @@ A GitHub Pages site that hosts individually addressable HTML pages for the verse
 
 The build is driven by small Python scripts and shell wrappers, documented step-by-step in [`readme.org`](https://github.com/sanskrit-lexicon/rvlinks/blob/gh-pages/readme.org):
 
-- [`rvtest.py`](https://github.com/sanskrit-lexicon/rvlinks/blob/gh-pages/rvtest.py) — successive transformations of the source HTML (bad-character fixes, accent/visarga spelling normalization, Devanāgarī digit + udātta/anudātta encoding, Unix line endings).
-- [`make_hymns_01.py`](https://github.com/sanskrit-lexicon/rvlinks/blob/gh-pages/make_hymns_01.py) — splits the normalized document into per-hymn files under `rvhymns/`.
+- [`rvtest.py`](https://github.com/sanskrit-lexicon/rvlinks/blob/gh-pages/rvtest.py) — successive transformations of the source HTML (bad-character fixes, accent/visarga spelling normalization, Devanāgarī digit + udātta/anudātta encoding, Unix line endings); [`prep_source.py`](https://github.com/sanskrit-lexicon/rvlinks/blob/gh-pages/prep_source.py) is the Python-3 port of the 5/6/7 chain used by `redo.sh`.
+- [`make_hymns_01.py`](https://github.com/sanskrit-lexicon/rvlinks/blob/gh-pages/make_hymns_01.py) — splits the normalized document into per-hymn files under `rvhymns/` and emits Open Graph meta (title, description = first IAST line of verse 1, canonical URL).
+- [`keep_griffith_fix.py`](https://github.com/sanskrit-lexicon/rvlinks/blob/gh-pages/keep_griffith_fix.py) — re-grafts the hand-fixed 2020 Griffith bodies of `rv08.049`–`rv08.103` (issue [#2](https://github.com/sanskrit-lexicon/rvlinks/issues/2)) after every rebuild, until the source document itself is corrected.
 - [`redo.sh`](https://github.com/sanskrit-lexicon/rvlinks/blob/gh-pages/redo.sh) / [`clean.sh`](https://github.com/sanskrit-lexicon/rvlinks/blob/gh-pages/clean.sh) — regenerate `rvhymns/` from the source and remove intermediate files.
+
+Every hymn page carries Open Graph meta (`og:title` "RV X.Y", `og:description` = first IAST pāda of verse 1, canonical `og:url`). When a 1200x630 PNG exists at `cards/rv<book>.<hymn>.png`, the page also references it as `og:image` **and** emits `twitter:card=summary_large_image` + `twitter:image` — without that hint Telegram renders the compact preview instead of the large card. Card faces carry the hymn number + first line in Devanāgarī + IAST only (the Russian layer keeps its Elizarenkova-aligned attribution on the pages). Generate cards with headless Chrome (`CHROME_BIN` overrides the Chrome path): `python3 make_cards.py temp_RV_sa-hn-ru-de-en_5.html rv01.001 rv02.001 ...`, then re-run `make_hymns_01.py` + `keep_griffith_fix.py`. The 10-sūkta pilot set (H6477): first sūkta of each of the 10 maṇḍalas; the full 1028 set follows the Telegram canary.
 
 The reference spelling target is the [Sanskrit Documents Ṛg Veda](https://sanskritdocuments.org/doc_veda/r01.html?lang=sa).
 

@@ -1,10 +1,21 @@
 # coding=utf-8
-import sys,re,codecs
+import sys,re,codecs,os
+if hasattr(sys.stdout,'reconfigure'):
+ sys.stdout.reconfigure(encoding='utf-8')
+
+BASE_URL = "https://sanskrit-lexicon.github.io/rvlinks"
+
 hymn_template =u"""<!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 <title>%s</title>
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Ṛg Veda · rvlinks">
+<meta property="og:title" content="%s">
+<meta property="og:description" content="%s">
+<meta property="og:url" content="%s">
+%s
 <link rel="stylesheet" type="text/css" href="rvhymns.css">
 </head>
 <body>
@@ -30,12 +41,34 @@ class Hymn(object):
    f.write(html + '\n')
  def html(self):
   mandala,hymnnum = self.hymnid
-  title = "rv%s.%s" %(mandala,hymnnum)
+  page = "rv%s.%s" %(mandala,hymnnum)
+  book = int(mandala)
+  hymn = int(hymnnum)
+  title = "RV %s.%s — Ṛg Veda, hymn %s.%s" %(book,hymn,book,hymn)
+  # first line of verse 1: IAST preferred, Devanagari fallback
+  desc = para_first_line(self.verses[0].verselines,'hn')
+  if not desc:
+   desc = para_first_line(self.verses[0].verselines,'sa')
+  if desc:
+   desc = xml_escape(desc)
+   if len(desc) > 300:
+    desc = desc[:297] + '...'
+  else:
+   desc = title
+  ogimage = ''
+  if os.path.exists(os.path.join('cards',page + '.png')):
+   ogimage = ('<meta property="og:image" content="%s/cards/%s.png">\n'
+              '<meta property="og:image:width" content="1200">\n'
+              '<meta property="og:image:height" content="630">\n'
+              '<meta name="twitter:card" content="summary_large_image">\n'
+              '<meta name="twitter:image" content="%s/cards/%s.png">'
+             ) %(BASE_URL,page,BASE_URL,page)
+  ogurl = '%s/rvhymns/%s.html' %(BASE_URL,page)
   bodylines = []
   for verse in self.verses:
    (_,_,versenum) = verse.verseid
    verselines = verse.verselines
-   #print title, len(verselines)
+   #print(title, len(verselines))
    for iline,line in enumerate(verselines):
     if iline == 0:
      # use id attribute for html5
@@ -44,27 +77,44 @@ class Hymn(object):
     else:
      bodylines.append(line)
   bodystring = '\n'.join(bodylines)
-  htmlstring = hymn_template %(title,bodystring)
+  htmlstring = hymn_template %(title,title,desc,ogurl,ogimage,bodystring)
   return htmlstring
+
 
 class Verse(object):
  def __init__(self,verseid,verselines):
   self.verseid = verseid
   self.verselines = verselines
 
+
+def para_first_line(lines,cls):
+ # content of the first line of the first paragraph of class cls, tags stripped
+ prefix = '<p class="%s">' % cls
+ for line in lines:
+  if line.startswith(prefix):
+   content = line[len(prefix):]
+   end = content.find('</p>')
+   if end != -1:
+    content = content[:end]
+   content = re.split(r'<br\s*/?>',content)[0]
+   content = re.sub(r'<[^>]+>','',content).strip()
+   return content
+ return None
+
+def xml_escape(s):
+ return s.replace('&','&amp;').replace('<','&lt;').replace('>','&gt;')
+
 def init_verses(lines):
  verses = []
- inverse = False
  for idx,line in enumerate(lines):
   m = re.search(r'^<br /><p class="stamp">rv([0-9]+)[.]([0-9]+)[.]([0-9]+)</p>$',line)
   if idx == 0:
    # first verse
    if not m:
-    print "init_verses problem",idx,line.encode('utf-8')
+    print("init_verses problem",idx,line)
     exit(1)
    verseid = (m.group(1),m.group(2),m.group(3)) # keep as tuple for later
    verselines = [line]
-   inverse = True
    continue
   if m:
    # first line of next verse found
@@ -73,7 +123,6 @@ def init_verses(lines):
    # Start new verse
    verseid = (m.group(1),m.group(2),m.group(3)) # keep as tuple for later
    verselines = [line]
-   inverse = True
    continue
   else:
    # add next line of current verse
@@ -111,31 +160,36 @@ def adjust_lines1(lines):
  flag = False
  for idx,line in enumerate(lines):
   if line.startswith('</td>'):
-   print "last line #",(idx-1)+1
+   print("last line #",(idx-1)+1)
    break  # ending table code skipped.
   if line.startswith('<br /><p'):
-   if not flag: print "first line #",idx+1
+   if not flag: print("first line #",idx+1)
    flag = True
   if flag:
     out.append(line)
  return out
+
 if __name__ == "__main__":
  filein=sys.argv[1]
  dirout = sys.argv[2]
+ filelog = sys.argv[3]
  with codecs.open(filein,"r","utf-8") as f:
   lines = [x.rstrip('\r\n') for x in f]
- print len(lines),"lines in",filein
+ print(len(lines),"lines in",filein)
  outlines = adjust_lines1(lines)
- print len(outlines),"adjusted lines"
+ print(len(outlines),"adjusted lines")
+
  verses = init_verses(outlines)
- print len(verses),"verses found"
+ print(len(verses),"verses found")
  hymns = init_hymns(verses)
- print len(hymns),"hymns found"
+ print(len(hymns),"hymns found")
  # Write each hymn to a file
+ flog = codecs.open(filelog,"w","utf-8")
  for ihymn,hymn in enumerate(hymns):
   mandala,hymnnum = hymn.hymnid
   fileout = '%s/rv%s.%s.html' %(dirout,mandala,hymnnum)
   hymn.write(fileout)
-  #if ihymn == 5:
-  # print "debug exit"
-  # exit(1)
+  out = 'rv%s.%s %s verses' %(mandala,hymnnum,len(hymn.verses))
+  flog.write(out+'\n')
+ flog.close()
+ print(len(hymns),'statistics written to',filelog)
